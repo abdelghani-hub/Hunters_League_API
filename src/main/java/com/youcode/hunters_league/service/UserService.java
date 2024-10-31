@@ -13,11 +13,7 @@ public interface UserService {
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByUsernameAndPassword(String username, String password);
-
     Optional<User> findByCin(String cin);
-
-    boolean isExistsByField(String fieldName, String value);
 
     Optional<User> findById(UUID id);
 }

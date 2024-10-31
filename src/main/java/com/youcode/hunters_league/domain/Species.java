@@ -8,8 +8,6 @@ import lombok.*;
 import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,4 +29,51 @@ public class Species {
 
     private Integer points;
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public SpeciesType getCategory() {
+        return category;
+    }
+
+    public void setCategory(SpeciesType category) {
+        this.category = category;
+    }
+
+    public Double getMinimumWeight() {
+        return minimumWeight;
+    }
+
+    public void setMinimumWeight(Double minimumWeight) {
+        this.minimumWeight = minimumWeight;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
 }

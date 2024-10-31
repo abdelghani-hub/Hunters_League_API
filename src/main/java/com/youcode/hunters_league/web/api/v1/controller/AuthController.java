@@ -1,6 +1,7 @@
 package com.youcode.hunters_league.web.api.v1.controller;
 
 import com.youcode.hunters_league.domain.User;
+import com.youcode.hunters_league.exception.MismatchException;
 import com.youcode.hunters_league.web.vm.user.UserVM;
 import com.youcode.hunters_league.service.impl.UserServiceImpl;
 import com.youcode.hunters_league.web.vm.user.RegisterVM;
@@ -25,7 +26,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserVM> register(@Valid @RequestBody RegisterVM registerVM) {
+    public ResponseEntity<UserVM> register(@RequestBody @Valid RegisterVM registerVM) {
+        // Check password and confirm password
+        if (!registerVM.getPassword().equals(registerVM.getConfirmPassword())) {
+            throw new MismatchException("confirmPassword", "Password and Confirm Password do not match");
+        }
         User user = registerVmMapper.toUser(registerVM);
         User savedUser = userServiceImpl.save(user);
         UserVM userVM = userVmMapper.toUserVM(savedUser);

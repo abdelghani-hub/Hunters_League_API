@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class UniqueFieldValidator implements ConstraintValidator<UniqueField, String> {
     @Autowired
-    UserRepository UserRepository;
+    UserRepository userRepository;
 
     private String fieldName;
 
@@ -22,6 +22,13 @@ public class UniqueFieldValidator implements ConstraintValidator<UniqueField, St
             return true;
         }
 
-        return !UserRepository.isExistsByField(fieldName, value);
+        if (fieldName.equals("username")) {
+            return userRepository.findByUsername(value).isEmpty();
+        } else if (fieldName.equals("email")) {
+            return userRepository.findByEmail(value).isEmpty();
+        } else if (fieldName.equals("cin")) {
+            return userRepository.findByCin(value).isEmpty();
+        }
+        return true;
     }
 }

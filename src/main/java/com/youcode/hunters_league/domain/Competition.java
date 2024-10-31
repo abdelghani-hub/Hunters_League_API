@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,4 +35,75 @@ public class Competition {
     @OneToMany(mappedBy = "competition")
     private List<Participation> participations;
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public SpeciesType getSpeciesType() {
+        return speciesType;
+    }
+
+    public void setSpeciesType(SpeciesType speciesType) {
+        this.speciesType = speciesType;
+    }
+
+    public Integer getMinParticipants() {
+        return minParticipants;
+    }
+
+    public void setMinParticipants(Integer minParticipants) {
+        this.minParticipants = minParticipants;
+    }
+
+    public Integer getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public void setMaxParticipants(Integer maxParticipants) {
+        this.maxParticipants = maxParticipants;
+    }
+
+    public Boolean getOpenRegistration() {
+        return openRegistration;
+    }
+
+    public void setOpenRegistration(Boolean openRegistration) {
+        this.openRegistration = openRegistration;
+    }
+
+    public List<Participation> getParticipations() {
+        return participations;
+    }
+
+    public void setParticipations(List<Participation> participations) {
+        this.participations = participations;
+    }
 }

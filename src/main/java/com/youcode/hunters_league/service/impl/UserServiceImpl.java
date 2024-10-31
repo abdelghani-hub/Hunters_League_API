@@ -31,8 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(@Valid User user) {
         // Check if the user already exists : username, email, cin
-        Optional<User> userOptional = this.findByUsername(user.getUsername());
-        if (userOptional.isPresent()) {
+        if (this.findByUsername(user.getUsername()).isPresent()) {
             throw new AlreadyExistException("username", user.getUsername());
         }
         if (this.findByEmail(user.getEmail()).isPresent()) {
@@ -74,7 +73,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
-    @Override
     public Optional<User> findByUsernameAndPassword(String username, String password) {
         if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
             return Optional.empty();
@@ -88,14 +86,6 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
         }
         return userRepository.findByCin(cin);
-    }
-
-    @Override
-    public boolean isExistsByField(String fieldName, String value) {
-        if (fieldName == null || fieldName.isEmpty() || value == null || value.isEmpty()) {
-            return false;
-        }
-        return userRepository.isExistsByField(fieldName, value);
     }
 
     @Override
