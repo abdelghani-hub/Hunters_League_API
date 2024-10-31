@@ -122,4 +122,13 @@ public class UserServiceImpl implements UserService {
         user.setLicenseExpirationDate(originalUser.getLicenseExpirationDate());
         return userRepository.save(user);
     }
+
+    public boolean delete(UUID id) {
+        if (userRepository.existsById(id)) {
+            // delete
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }
