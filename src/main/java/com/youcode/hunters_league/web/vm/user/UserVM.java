@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 public class UserVM {
     private String firstName;
     private String lastName;
@@ -13,6 +15,10 @@ public class UserVM {
     private String email;
     private String cin;
     private Role role;
+    private String nationality;
+    private LocalDateTime joinDate;
+    private LocalDateTime licenseExpirationDate;
+
 
     public UserVM() {
     }
@@ -72,5 +78,29 @@ public class UserVM {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public LocalDateTime getJoinDate() {
+        return joinDate;
+    }
+
+    public void setJoinDate(LocalDateTime joinDate) {
+        this.joinDate = joinDate;
+    }
+
+    public LocalDateTime getLicenseExpirationDate() {
+        return licenseExpirationDate;
+    }
+
+    public void setLicenseExpirationDate(LocalDateTime licenseExpirationDate) {
+        this.licenseExpirationDate = licenseExpirationDate;
     }
 }

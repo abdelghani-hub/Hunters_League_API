@@ -1,5 +1,6 @@
 package com.youcode.hunters_league.service.impl;
 
+import com.youcode.hunters_league.exception.InvalidCredentialsException;
 import com.youcode.hunters_league.service.UserService;
 import com.youcode.hunters_league.domain.User;
 import com.youcode.hunters_league.domain.enums.Role;
@@ -73,11 +74,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
-    public Optional<User> findByUsernameAndPassword(String username, String password) {
-        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+    public Optional<User> login(String login, String password) throws InvalidCredentialsException {
+        if (login == null || login.isEmpty()) {
             return Optional.empty();
         }
-        return userRepository.findByUsernameAndPassword(username, password);
+        Optional<User> userOp = userRepository.findByUsernameOrEmail(login, login);
+        if (userOp.isEmpty() || !passwordEncoder.matches(password, userOp.get().getPassword())) {
+            throw new InvalidCredentialsException("Invalid credentials");
+        }
+        return userOp;
     }
 
     @Override
