@@ -1,5 +1,6 @@
 package com.youcode.hunters_league.service.impl;
 
+import com.youcode.hunters_league.exception.EntityNotFoundException;
 import com.youcode.hunters_league.exception.InvalidCredentialsException;
 import com.youcode.hunters_league.service.UserService;
 import com.youcode.hunters_league.domain.User;
@@ -96,5 +97,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findById(UUID id) {
         return userRepository.findById(id);
+    }
+
+    public User update(User user) {
+        // Check if the user already exists id
+        User originalUser = this.findById(user.getId())
+                            .orElseThrow(() -> new EntityNotFoundException("User"));
+
+        // Check if the user already exists : username, email, cin
+        if (userRepository.existsByUsernameAndIdNot(user.getUsername(), originalUser.getId())) {
+            throw new AlreadyExistException("username", user.getUsername());
+        }
+        if (userRepository.existsByEmailAndIdNot(user.getEmail(), originalUser.getId())) {
+            throw new AlreadyExistException("email", user.getEmail());
+        }
+        if (userRepository.existsByCinAndIdNot(user.getCin(), originalUser.getId())) {
+            throw new AlreadyExistException("cin", user.getCin());
+        }
+
+        // update
+        user.setPassword(originalUser.getPassword());
+        user.setRole(originalUser.getRole());
+        user.setJoinDate(originalUser.getJoinDate());
+        user.setLicenseExpirationDate(originalUser.getLicenseExpirationDate());
+        return userRepository.save(user);
     }
 }
