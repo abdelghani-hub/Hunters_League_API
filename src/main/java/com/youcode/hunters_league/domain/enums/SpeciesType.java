@@ -1,15 +1,16 @@
 package com.youcode.hunters_league.domain.enums;
 
-import lombok.Getter;
-
-@Getter
 public enum SpeciesType {
 
-        SEA(9), BIG_GAME(3), BIRD(5);
+    SEA(9), BIG_GAME(3), BIRD(5);
 
-        private final int value;
+    private final int value;
 
-        SpeciesType(int value) {
-            this.value = value;
-        }
+    SpeciesType(int value) {
+        this.value = value;
     }
+
+    public int getValue() {
+        return value;
+    }
+}
