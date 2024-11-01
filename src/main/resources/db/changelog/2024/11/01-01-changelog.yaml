@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1730454771980-1
+      author: abdelghani
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: participation
+            constraintName: fk_participation_on_user
+
+        - addForeignKeyConstraint:
+            baseTableName: participation
+            baseColumnNames: user_id
+            referencedTableName: "user"
+            referencedColumnNames: id
+            onUpdate: cascade
+            onDelete: set null
+            constraintName: fk_participation_on_user

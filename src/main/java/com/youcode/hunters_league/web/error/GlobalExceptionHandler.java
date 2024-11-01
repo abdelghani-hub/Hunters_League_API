@@ -1,9 +1,6 @@
 package com.youcode.hunters_league.web.error;
 
-import com.youcode.hunters_league.exception.AlreadyExistException;
-import com.youcode.hunters_league.exception.EntityNotFoundException;
-import com.youcode.hunters_league.exception.InvalidCredentialsException;
-import com.youcode.hunters_league.exception.MismatchException;
+import com.youcode.hunters_league.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -60,5 +57,12 @@ public class GlobalExceptionHandler {
         Map<String, String> error = new HashMap<>();
         error.put("error", exception.getMessage());
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(NullOrBlankArgException.class)
+    public ResponseEntity<Map<String, String>> handleNullOrBlankArgException(NullOrBlankArgException exception) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", exception.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }
