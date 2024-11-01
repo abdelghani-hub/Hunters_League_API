@@ -8,12 +8,12 @@ import com.youcode.hunters_league.web.vm.mapper.UserVmMapper;
 import com.youcode.hunters_league.web.vm.user.UserUpdateVM;
 import com.youcode.hunters_league.web.vm.user.UserVM;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -38,12 +38,16 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Void> delete(String id) throws NullOrBlankArgException {
+    public ResponseEntity<Map<String, String>> delete(String id) throws NullOrBlankArgException {
         if (id == null || id.isEmpty())
             throw new NullOrBlankArgException("id");
 
-        if (userServiceImpl.delete(UUID.fromString(id)))
-            return new ResponseEntity<>(HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Map<String, String> res = new HashMap<>();
+        if (userServiceImpl.delete(UUID.fromString(id))){
+            res.put("message", "User deleted successfully");
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+        res.put("error", "User not found");
+        return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
     }
 }
