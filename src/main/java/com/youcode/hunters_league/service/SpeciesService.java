@@ -11,4 +11,7 @@ public interface SpeciesService {
 
     @Transactional
     boolean delete(UUID id);
+
+    @Transactional
+    Species update(Species species);
 }

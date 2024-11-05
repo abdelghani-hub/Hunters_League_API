@@ -36,4 +36,18 @@ public class SpeciesServiceImpl implements SpeciesService {
         }
         return false;
     }
+
+    @Override
+    @Transactional
+    public Species update(Species species) {
+        // check if species exists
+        if (speciesRepository.existsById(species.getId())) {
+            // Check if species name already exists
+            if (speciesRepository.existsByNameAndIdNot(species.getName(), species.getId())) {
+                throw new AlreadyExistException("name", species.getName());
+            }
+            return speciesRepository.save(species);
+        }
+        return null;
+    }
 }

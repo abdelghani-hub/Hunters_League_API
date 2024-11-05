@@ -14,4 +14,6 @@ public interface SpeciesRepository extends JpaRepository<Species, UUID> {
     boolean existsByName(String name);
 
     Optional<Species> findByName(String value);
+
+    boolean existsByNameAndIdNot(String name, UUID id);
 }
