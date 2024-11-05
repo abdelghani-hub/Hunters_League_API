@@ -6,6 +6,7 @@ import com.youcode.hunters_league.repository.SpeciesRepository;
 import com.youcode.hunters_league.service.SpeciesService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -13,8 +14,12 @@ import java.util.UUID;
 @Service
 public class SpeciesServiceImpl implements SpeciesService {
     private final SpeciesRepository speciesRepository;
-    public SpeciesServiceImpl(SpeciesRepository speciesRepository) {
+
+    private JdbcTemplate jdbcTemplate;
+
+    public SpeciesServiceImpl(SpeciesRepository speciesRepository, JdbcTemplate jdbcTemplate) {
         this.speciesRepository = speciesRepository;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
@@ -30,6 +35,11 @@ public class SpeciesServiceImpl implements SpeciesService {
     @Transactional
     public boolean delete(UUID id) {
         if (speciesRepository.existsById(id)) {
+            // First bulk update all related hunt records
+            jdbcTemplate.update(
+                    "UPDATE hunt SET species_id = NULL WHERE species_id = ?",
+                    id
+            );
             // delete
             speciesRepository.deleteById(id);
             return true;

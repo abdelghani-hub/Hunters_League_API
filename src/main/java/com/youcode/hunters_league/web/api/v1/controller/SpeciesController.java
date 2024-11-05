@@ -1,6 +1,7 @@
 package com.youcode.hunters_league.web.api.v1.controller;
 
 import com.youcode.hunters_league.domain.Species;
+import com.youcode.hunters_league.exception.NullOrBlankArgException;
 import com.youcode.hunters_league.service.SpeciesService;
 import com.youcode.hunters_league.web.vm.mapper.SpeciesEditVmMapper;
 import com.youcode.hunters_league.web.vm.mapper.SpeciesVmMapper;
@@ -10,6 +11,10 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/species")
@@ -38,5 +43,19 @@ public class SpeciesController {
         Species updatedSpecies = speciesService.update(species);
         SpeciesEditVM updatedSpeciesEditVM = speciesEditVmMapper.toSpeciesEditVM(updatedSpecies);
         return new ResponseEntity<>(updatedSpeciesEditVM, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Map<String, String>> delete(String id) throws NullOrBlankArgException {
+        if (id == null || id.isEmpty())
+            throw new NullOrBlankArgException("id");
+
+        Map<String, String> res = new HashMap<>();
+        if (speciesService.delete(UUID.fromString(id))){
+            res.put("message", "Species deleted successfully");
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+        res.put("error", "Species not found");
+        return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
     }
 }
