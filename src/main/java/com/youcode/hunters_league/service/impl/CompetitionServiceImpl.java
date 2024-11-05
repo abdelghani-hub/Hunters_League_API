@@ -2,10 +2,13 @@ package com.youcode.hunters_league.service.impl;
 
 import com.youcode.hunters_league.domain.Competition;
 import com.youcode.hunters_league.exception.AlreadyExistException;
+import com.youcode.hunters_league.exception.EntityNotFoundException;
 import com.youcode.hunters_league.exception.InvalidCredentialsException;
 import com.youcode.hunters_league.exception.NotValidConstraintException;
 import com.youcode.hunters_league.repository.CompetitionRepository;
 import com.youcode.hunters_league.service.CompetitionService;
+import com.youcode.hunters_league.service.dto.CompetitionDetailsDTO;
+import com.youcode.hunters_league.service.dto.mapper.CompetitionDetailsDtoMapper;
 import com.youcode.hunters_league.utils.LocalDateTimeUtil;
 import com.youcode.hunters_league.web.vm.mapper.CompetitionVmMapper;
 import jakarta.transaction.Transactional;
@@ -20,10 +23,12 @@ import java.util.UUID;
 public class CompetitionServiceImpl implements CompetitionService {
     private final CompetitionRepository competitionRepository;
     private final CompetitionVmMapper competitionVmMapper;
+    private final CompetitionDetailsDtoMapper competitionDetailsDtoMapper;
 
-    public CompetitionServiceImpl(CompetitionRepository competitionRepository, CompetitionVmMapper competitionVmMapper) {
+    public CompetitionServiceImpl(CompetitionRepository competitionRepository, CompetitionVmMapper competitionVmMapper, CompetitionDetailsDtoMapper competitionDetailsDtoMapper) {
         this.competitionRepository = competitionRepository;
         this.competitionVmMapper = competitionVmMapper;
+        this.competitionDetailsDtoMapper = competitionDetailsDtoMapper;
     }
 
     @Override
@@ -80,6 +85,16 @@ public class CompetitionServiceImpl implements CompetitionService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public CompetitionDetailsDTO findByCode(String code) throws EntityNotFoundException {
+        // Check if the competition exists
+        Optional<Competition> competitionOp = competitionRepository.findByCode(code);
+        if (competitionOp.isEmpty()) {
+            throw new EntityNotFoundException("Competition");
+        }
+        return competitionDetailsDtoMapper.toCompetitionDetailsDTO(competitionOp.get());
     }
 
     private boolean isTheWeekEmpty(LocalDateTime date, UUID competitionId) {
