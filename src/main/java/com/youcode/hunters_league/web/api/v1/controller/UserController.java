@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -49,5 +50,12 @@ public class UserController {
         }
         res.put("error", "User not found");
         return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserVM>> search(String usernameORemail) throws NullOrBlankArgException {
+        List<User> users = userServiceImpl.findByUsernameOrEmail(usernameORemail);
+        List<UserVM> userVMs = users.stream().map(userVmMapper::toUserVM).toList();
+        return new ResponseEntity<>(userVMs, HttpStatus.OK);
     }
 }
