@@ -95,14 +95,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(UUID id) {
-        return userRepository.findById(id);
+    public User findById(UUID id) {
+        Optional<User> userOP = userRepository.findById(id);
+        if (!userOP.isPresent()) {
+            throw new EntityNotFoundException("User");
+        }
+        return userOP.get();
     }
 
     public User update(User user) {
         // Check if the user already exists id
-        User originalUser = this.findById(user.getId())
-                            .orElseThrow(() -> new EntityNotFoundException("User"));
+        User originalUser = this.findById(user.getId());
 
         // Check if the user already exists : username, email, cin
         if (userRepository.existsByUsernameAndIdNot(user.getUsername(), originalUser.getId())) {

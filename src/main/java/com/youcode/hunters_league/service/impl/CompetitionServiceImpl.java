@@ -2,6 +2,7 @@ package com.youcode.hunters_league.service.impl;
 
 import com.youcode.hunters_league.domain.Competition;
 import com.youcode.hunters_league.exception.AlreadyExistException;
+import com.youcode.hunters_league.exception.EntityNotFoundException;
 import com.youcode.hunters_league.exception.InvalidCredentialsException;
 import com.youcode.hunters_league.exception.NotValidConstraintException;
 import com.youcode.hunters_league.repository.CompetitionRepository;
@@ -94,5 +95,18 @@ public class CompetitionServiceImpl implements CompetitionService {
         else {
             return !competitionRepository.existsByIdNotAndDateBetween(competitionId, prevSunday, nextSaturday);
         }
+    }
+
+    public Competition getCompetition(String competitionCode) throws EntityNotFoundException {
+        Optional<Competition> competition = this.findByCode(competitionCode);
+        if (competition.isEmpty()) {
+            throw new EntityNotFoundException("Competition");
+        }
+        return competition.get();
+    }
+
+    @Override
+    public Optional<Competition> findByCode(String code) {
+        return competitionRepository.findByCode(code);
     }
 }
