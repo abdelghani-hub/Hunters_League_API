@@ -13,7 +13,10 @@ public interface CompetitionService {
 
     Optional<Competition> findById(UUID id);
 
+    @Transactional
     Competition update(Competition competition);
 
     boolean delete(UUID id);
+
+    Optional<Competition> findByCode(String code);
 }
