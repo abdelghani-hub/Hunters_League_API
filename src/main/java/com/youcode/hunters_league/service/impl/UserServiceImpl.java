@@ -8,9 +8,12 @@ import com.youcode.hunters_league.domain.User;
 import com.youcode.hunters_league.domain.enums.Role;
 import com.youcode.hunters_league.exception.AlreadyExistException;
 import com.youcode.hunters_league.repository.UserRepository;
+import com.youcode.hunters_league.specification.UserSpecification;
 import com.youcode.hunters_league.web.vm.mapper.UserVmMapper;
+import com.youcode.hunters_league.web.vm.user.UserVM;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -142,5 +145,11 @@ public class UserServiceImpl implements UserService {
             throw new NullOrBlankArgException("username or email");
         }
         return userRepository.findByUsernameContainingOrEmailContaining(usernameORemail, usernameORemail);
+    }
+
+    public List<User> filter(String firstName, String lastName, String cin) {
+        final Specification<User> specification = UserSpecification.filterUser(firstName, lastName, cin);
+        final List<User> users = userRepository.findAll(specification);
+        return users;
     }
 }
