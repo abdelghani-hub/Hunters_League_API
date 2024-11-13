@@ -25,6 +25,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     private final CompetitionVmMapper competitionVmMapper;
     private final CompetitionDetailsDtoMapper competitionDetailsDtoMapper;
 
+
     public CompetitionServiceImpl(CompetitionRepository competitionRepository, CompetitionVmMapper competitionVmMapper, CompetitionDetailsDtoMapper competitionDetailsDtoMapper) {
         this.competitionRepository = competitionRepository;
         this.competitionVmMapper = competitionVmMapper;
@@ -87,16 +88,6 @@ public class CompetitionServiceImpl implements CompetitionService {
         return false;
     }
 
-    @Override
-    public CompetitionDetailsDTO findByCode(String code) throws EntityNotFoundException {
-        // Check if the competition exists
-        Optional<Competition> competitionOp = competitionRepository.findByCode(code);
-        if (competitionOp.isEmpty()) {
-            throw new EntityNotFoundException("Competition");
-        }
-        return competitionDetailsDtoMapper.toCompetitionDetailsDTO(competitionOp.get());
-    }
-
     private boolean isTheWeekEmpty(LocalDateTime date, UUID competitionId) {
         LocalDateTime prevSunday = LocalDateTimeUtil.getStartOfWeek(date);
         LocalDateTime nextSaturday = LocalDateTimeUtil.getEndOfWeek(date);
@@ -109,5 +100,23 @@ public class CompetitionServiceImpl implements CompetitionService {
         else {
             return !competitionRepository.existsByIdNotAndDateBetween(competitionId, prevSunday, nextSaturday);
         }
+    }
+
+    @Override
+    public CompetitionDetailsDTO findByCode(String code) throws EntityNotFoundException {
+        // Check if the competition exists
+        Optional<Competition> competitionOp = competitionRepository.findByCode(code);
+        if (competitionOp.isEmpty()) {
+            throw new EntityNotFoundException("Competition");
+        }
+        return competitionDetailsDtoMapper.toCompetitionDetailsDTO(competitionOp.get());
+    }
+
+    public Competition getCompetition(String competitionCode) {
+        Optional<Competition> competitionOp = competitionRepository.findByCode(competitionCode);
+        if (competitionOp.isEmpty()) {
+            throw new EntityNotFoundException("Competition");
+        }
+        return competitionOp.get();
     }
 }

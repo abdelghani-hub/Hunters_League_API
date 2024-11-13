@@ -15,5 +15,5 @@ public interface UserService {
 
     Optional<User> findByCin(String cin);
 
-    Optional<User> findById(UUID id);
+    User findById(UUID id);
 }

@@ -1,6 +1,7 @@
 package com.youcode.hunters_league.repository;
 
 import com.youcode.hunters_league.domain.Competition;
+import com.youcode.hunters_league.service.dto.CompetitionDetailsDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
