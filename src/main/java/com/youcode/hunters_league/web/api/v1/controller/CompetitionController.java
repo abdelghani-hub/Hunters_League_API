@@ -3,7 +3,7 @@ package com.youcode.hunters_league.web.api.v1.controller;
 import com.youcode.hunters_league.domain.Competition;
 import com.youcode.hunters_league.exception.NullOrBlankArgException;
 import com.youcode.hunters_league.service.CompetitionService;
-import com.youcode.hunters_league.service.dto.CompetitionDetailsDTO;
+import com.youcode.hunters_league.dto.CompetitionDetailsDTO;
 import com.youcode.hunters_league.web.vm.competition.CompetitionEditVM;
 import com.youcode.hunters_league.web.vm.competition.CompetitionVM;
 import com.youcode.hunters_league.web.vm.mapper.CompetitionEditVmMapper;

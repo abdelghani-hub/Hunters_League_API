@@ -1,4 +1,4 @@
-package com.youcode.hunters_league.web.vm.user;
+package com.youcode.hunters_league.dto.auth;
 
 import com.youcode.hunters_league.annotation.UniqueField;
 import jakarta.validation.constraints.Email;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class RegisterVM {
+public class RegisterRequest {
     @NotBlank(message = "First name is required")
     private String firstName;
 
@@ -40,10 +40,10 @@ public class RegisterVM {
     @NotBlank(message = "Nationality is required")
     private String nationality;
 
-    public RegisterVM() {
+    public RegisterRequest() {
     }
 
-    public RegisterVM(String firstName, String lastName, String username, String email, String password, String confirmPassword, String cin, String nationality) {
+    public RegisterRequest(String firstName, String lastName, String username, String email, String password, String confirmPassword, String cin, String nationality) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;

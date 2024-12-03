@@ -1,16 +1,15 @@
 package com.youcode.hunters_league.service.impl;
 
+import com.youcode.hunters_league.domain.AppUser;
 import com.youcode.hunters_league.exception.EntityNotFoundException;
 import com.youcode.hunters_league.exception.InvalidCredentialsException;
 import com.youcode.hunters_league.exception.NullOrBlankArgException;
 import com.youcode.hunters_league.service.UserService;
-import com.youcode.hunters_league.domain.User;
 import com.youcode.hunters_league.domain.enums.Role;
 import com.youcode.hunters_league.exception.AlreadyExistException;
 import com.youcode.hunters_league.repository.UserRepository;
 import com.youcode.hunters_league.specification.UserSpecification;
 import com.youcode.hunters_league.web.vm.mapper.UserVmMapper;
-import com.youcode.hunters_league.web.vm.user.UserVM;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.data.jpa.domain.Specification;
@@ -36,36 +35,36 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User save(@Valid User user) {
-        // Check if the user already exists : username, email, cin
-        if (this.findByUsername(user.getUsername()).isPresent()) {
-            throw new AlreadyExistException("username", user.getUsername());
+    public AppUser save(@Valid AppUser appUser) {
+        // Check if the appUser already exists : username, email, cin
+        if (this.findByUsername(appUser.getUsername()).isPresent()) {
+            throw new AlreadyExistException("username", appUser.getUsername());
         }
-        if (this.findByEmail(user.getEmail()).isPresent()) {
-            throw new AlreadyExistException("email", user.getEmail());
+        if (this.findByEmail(appUser.getEmail()).isPresent()) {
+            throw new AlreadyExistException("email", appUser.getEmail());
         }
-        if (this.findByCin(user.getCin()).isPresent()) {
-            throw new AlreadyExistException("cin", user.getCin());
+        if (this.findByCin(appUser.getCin()).isPresent()) {
+            throw new AlreadyExistException("cin", appUser.getCin());
         }
 
         // Check Encode password
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
+        String encodedPassword = passwordEncoder.encode(appUser.getPassword());
+        appUser.setPassword(encodedPassword);
 
-        // Set the user role
-        user.setRole(Role.MEMBER);
+        // Set the appUser role
+        appUser.setRole(Role.MEMBER);
 
         // Set Join & License Expiration Dates
-        user.setJoinDate(LocalDateTime.now());
-        user.setLicenseExpirationDate(LocalDateTime.now().plusMonths(1)); // 1 month
+        appUser.setJoinDate(LocalDateTime.now());
+        appUser.setLicenseExpirationDate(LocalDateTime.now().plusMonths(1)); // 1 month
 
-        // Save & Map the user
-        User savedUser = userRepository.save(user);
-        return savedUser;
+        // Save & Map the appUser
+        AppUser savedAppUser = userRepository.save(appUser);
+        return savedAppUser;
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
+    public Optional<AppUser> findByUsername(String username) {
         if(username == null || username.isEmpty()) {
             return Optional.empty();
         }
@@ -73,18 +72,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<AppUser> findByEmail(String email) {
         if(email == null || email.isEmpty()) {
             return Optional.empty();
         }
         return userRepository.findByEmail(email);
     }
 
-    public Optional<User> login(String login, String password) throws InvalidCredentialsException {
+    public Optional<AppUser> login(String login, String password) throws InvalidCredentialsException {
         if (login == null || login.isEmpty()) {
             return Optional.empty();
         }
-        Optional<User> userOp = userRepository.findByUsernameOrEmail(login, login);
+        Optional<AppUser> userOp = userRepository.findByUsernameOrEmail(login, login);
         if (userOp.isEmpty() || !passwordEncoder.matches(password, userOp.get().getPassword())) {
             throw new InvalidCredentialsException("Invalid credentials");
         }
@@ -92,7 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByCin(String cin) {
+    public Optional<AppUser> findByCin(String cin) {
         if(cin == null || cin.isEmpty()) {
             return Optional.empty();
         }
@@ -100,35 +99,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(UUID id) {
-        Optional<User> userOP = userRepository.findById(id);
+    public AppUser findById(UUID id) {
+        Optional<AppUser> userOP = userRepository.findById(id);
         if (!userOP.isPresent()) {
-            throw new EntityNotFoundException("User");
+            throw new EntityNotFoundException("AppUser");
         }
         return userOP.get();
     }
 
-    public User update(User user) {
-        // Check if the user already exists id
-        User originalUser = this.findById(user.getId());
+    public AppUser update(AppUser appUser) {
+        // Check if the appUser already exists id
+        AppUser originalAppUser = this.findById(appUser.getId());
 
-        // Check if the user already exists : username, email, cin
-        if (userRepository.existsByUsernameAndIdNot(user.getUsername(), originalUser.getId())) {
-            throw new AlreadyExistException("username", user.getUsername());
+        // Check if the appUser already exists : username, email, cin
+        if (userRepository.existsByUsernameAndIdNot(appUser.getUsername(), originalAppUser.getId())) {
+            throw new AlreadyExistException("username", appUser.getUsername());
         }
-        if (userRepository.existsByEmailAndIdNot(user.getEmail(), originalUser.getId())) {
-            throw new AlreadyExistException("email", user.getEmail());
+        if (userRepository.existsByEmailAndIdNot(appUser.getEmail(), originalAppUser.getId())) {
+            throw new AlreadyExistException("email", appUser.getEmail());
         }
-        if (userRepository.existsByCinAndIdNot(user.getCin(), originalUser.getId())) {
-            throw new AlreadyExistException("cin", user.getCin());
+        if (userRepository.existsByCinAndIdNot(appUser.getCin(), originalAppUser.getId())) {
+            throw new AlreadyExistException("cin", appUser.getCin());
         }
 
         // update
-        user.setPassword(originalUser.getPassword());
-        user.setRole(originalUser.getRole());
-        user.setJoinDate(originalUser.getJoinDate());
-        user.setLicenseExpirationDate(originalUser.getLicenseExpirationDate());
-        return userRepository.save(user);
+        appUser.setPassword(originalAppUser.getPassword());
+        appUser.setRole(originalAppUser.getRole());
+        appUser.setJoinDate(originalAppUser.getJoinDate());
+        appUser.setLicenseExpirationDate(originalAppUser.getLicenseExpirationDate());
+        return userRepository.save(appUser);
     }
 
     public boolean delete(UUID id) {
@@ -140,16 +139,16 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-    public List<User> findByUsernameOrEmail(String usernameORemail) {
+    public List<AppUser> findByUsernameOrEmail(String usernameORemail) {
         if(usernameORemail == null || usernameORemail.isEmpty()) {
             throw new NullOrBlankArgException("username or email");
         }
         return userRepository.findByUsernameContainingOrEmailContaining(usernameORemail, usernameORemail);
     }
 
-    public List<User> filter(String firstName, String lastName, String cin) {
-        final Specification<User> specification = UserSpecification.filterUser(firstName, lastName, cin);
-        final List<User> users = userRepository.findAll(specification);
-        return users;
+    public List<AppUser> filter(String firstName, String lastName, String cin) {
+        final Specification<AppUser> specification = UserSpecification.filterUser(firstName, lastName, cin);
+        final List<AppUser> appUsers = userRepository.findAll(specification);
+        return appUsers;
     }
 }

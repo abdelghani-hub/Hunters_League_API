@@ -106,7 +106,7 @@ databaseChangeLog:
               - column:
                   name: license_expiration_date
                   type: DATETIME
-            tableName: user
+            tableName: appUser
   - changeSet:
       id: 1729538408373-6
       author: epshiro
@@ -117,5 +117,5 @@ databaseChangeLog:
             baseTableName: participation
             constraintName: FK_PARTICIPATION_ON_USER
             referencedColumnNames: id
-            referencedTableName: user
+            referencedTableName: appUser
 
