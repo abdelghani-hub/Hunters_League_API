@@ -146,6 +146,16 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsernameContainingOrEmailContaining(usernameORemail, usernameORemail);
     }
 
+    @Override
+    public AppUser findByUsernameOrEmail(String username, String email) {
+        if(username == null || email.isEmpty()) {
+            throw new NullOrBlankArgException("username or email");
+        }
+        return userRepository
+                .findByUsernameOrEmail(username, email)
+                .orElseThrow(() -> new EntityNotFoundException("User"));
+    }
+
     public List<AppUser> filter(String firstName, String lastName, String cin) {
         final Specification<AppUser> specification = UserSpecification.filterUser(firstName, lastName, cin);
         final List<AppUser> appUsers = userRepository.findAll(specification);

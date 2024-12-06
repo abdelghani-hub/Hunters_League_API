@@ -32,7 +32,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     public Boolean create(@Valid String competition_code) throws NotValidConstraintException {
         Competition competition = competitionServiceImpl.getCompetition(competition_code);
         // TODO auth : get the auth appUser
-        AppUser appUser = userServiceImpl.findById(UUID.fromString("13e258c1-3b11-411a-92ef-f827cd88480f"));
+        AppUser appUser =
 
         // Validation
         if(appUser.getLicenseExpirationDate().isBefore(competition.getDate()))

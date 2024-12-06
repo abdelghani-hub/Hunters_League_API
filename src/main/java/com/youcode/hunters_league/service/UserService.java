@@ -16,4 +16,6 @@ public interface UserService {
     Optional<AppUser> findByCin(String cin);
 
     AppUser findById(UUID id);
+
+    AppUser findByUsernameOrEmail(String username, String email);
 }
