@@ -30,6 +30,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
+            .requiresChannel(channel ->
+                    channel.anyRequest().requiresSecure())
             .authorizeHttpRequests(
                 authorizeRequests -> authorizeRequests
                     .requestMatchers("/api/v1/auth/**").permitAll()
