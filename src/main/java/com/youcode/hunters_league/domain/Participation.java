@@ -16,7 +16,7 @@ public class Participation{
     private UUID id;
 
     @ManyToOne
-    private User user;
+    private AppUser appUser;
 
     @ManyToOne
     private Competition competition;
@@ -34,12 +34,12 @@ public class Participation{
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public AppUser getAppUser() {
+        return appUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
     }
 
     public Competition getCompetition() {

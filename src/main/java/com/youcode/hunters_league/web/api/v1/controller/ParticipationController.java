@@ -1,11 +1,11 @@
 package com.youcode.hunters_league.web.api.v1.controller;
 
 import com.youcode.hunters_league.service.impl.ParticipationServiceImpl;
-import com.youcode.hunters_league.web.vm.mapper.ParticipationCreateVmMapper;
 import com.youcode.hunters_league.web.vm.participation.ParticipationCreateVM;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +25,7 @@ public class ParticipationController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('MEMBER')")
     public ResponseEntity<Map<String, String>> create(@RequestBody @Valid ParticipationCreateVM participationCreateVm) {
         Boolean registered = participationServiceImpl.create(participationCreateVm.getCompetition_code());
         HashMap<String, String> response = new HashMap<>();

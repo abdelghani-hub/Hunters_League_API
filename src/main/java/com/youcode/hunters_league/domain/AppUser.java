@@ -2,15 +2,17 @@ package com.youcode.hunters_league.domain;
 
 import com.youcode.hunters_league.domain.enums.Role;
 import jakarta.persistence.*;
-import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Builder
-public class User {
+@Table(name = "app_user")
+public class AppUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -18,9 +20,6 @@ public class User {
     private String username;
 
     private String password;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
     private String firstName;
 
@@ -36,17 +35,19 @@ public class User {
 
     private LocalDateTime licenseExpirationDate;
 
-    @OneToMany(mappedBy = "user")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "appUser")
     private List<Participation> participations;
 
-    public User() {
+    public AppUser() {
     }
 
-    public User(UUID id, String username, String password, Role role, String firstName, String lastName, String cin, String email, String nationality, LocalDateTime joinDate, LocalDateTime licenseExpirationDate) {
+    public AppUser(UUID id, String username, String password, String firstName, String lastName, String cin, String email, String nationality, LocalDateTime joinDate, LocalDateTime licenseExpirationDate, Role role) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.role = role;
         this.firstName = firstName;
         this.lastName = lastName;
         this.cin = cin;
@@ -54,6 +55,7 @@ public class User {
         this.nationality = nationality;
         this.joinDate = joinDate;
         this.licenseExpirationDate = licenseExpirationDate;
+        this.role = role;
     }
 
     public UUID getId() {
@@ -61,15 +63,36 @@ public class User {
     }
 
     public String getUsername() {
-        return username;
+        return !username.equals(null) ? username : email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role.getAuthorities();
     }
 
     public String getPassword() {
         return password;
-    }
-
-    public Role getRole() {
-        return role;
     }
 
     public String getFirstName() {
@@ -104,6 +127,10 @@ public class User {
         return participations;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
     public void setId(UUID id) {
         this.id = id;
     }
@@ -114,10 +141,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public void setFirstName(String firstName) {
@@ -151,5 +174,8 @@ public class User {
     public void setParticipations(List<Participation> participations) {
         this.participations = participations;
     }
-}
 
+    public void setRole(Role role) {
+        this.role = role;
+    }
+}
