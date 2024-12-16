@@ -7,6 +7,8 @@ import com.youcode.hunters_league.exception.InvalidCredentialsException;
 import com.youcode.hunters_league.exception.NotValidConstraintException;
 import com.youcode.hunters_league.repository.CompetitionRepository;
 import com.youcode.hunters_league.service.CompetitionService;
+import com.youcode.hunters_league.service.dto.CompetitionDetailsDTO;
+import com.youcode.hunters_league.service.dto.mapper.CompetitionDetailsDtoMapper;
 import com.youcode.hunters_league.utils.LocalDateTimeUtil;
 import com.youcode.hunters_league.web.vm.mapper.CompetitionVmMapper;
 import jakarta.transaction.Transactional;
@@ -21,10 +23,13 @@ import java.util.UUID;
 public class CompetitionServiceImpl implements CompetitionService {
     private final CompetitionRepository competitionRepository;
     private final CompetitionVmMapper competitionVmMapper;
+    private final CompetitionDetailsDtoMapper competitionDetailsDtoMapper;
 
-    public CompetitionServiceImpl(CompetitionRepository competitionRepository, CompetitionVmMapper competitionVmMapper) {
+
+    public CompetitionServiceImpl(CompetitionRepository competitionRepository, CompetitionVmMapper competitionVmMapper, CompetitionDetailsDtoMapper competitionDetailsDtoMapper) {
         this.competitionRepository = competitionRepository;
         this.competitionVmMapper = competitionVmMapper;
+        this.competitionDetailsDtoMapper = competitionDetailsDtoMapper;
     }
 
     @Override
@@ -97,16 +102,21 @@ public class CompetitionServiceImpl implements CompetitionService {
         }
     }
 
-    public Competition getCompetition(String competitionCode) throws EntityNotFoundException {
-        Optional<Competition> competition = this.findByCode(competitionCode);
-        if (competition.isEmpty()) {
+    @Override
+    public CompetitionDetailsDTO findByCode(String code) throws EntityNotFoundException {
+        // Check if the competition exists
+        Optional<Competition> competitionOp = competitionRepository.findByCode(code);
+        if (competitionOp.isEmpty()) {
             throw new EntityNotFoundException("Competition");
         }
-        return competition.get();
+        return competitionDetailsDtoMapper.toCompetitionDetailsDTO(competitionOp.get());
     }
 
-    @Override
-    public Optional<Competition> findByCode(String code) {
-        return competitionRepository.findByCode(code);
+    public Competition getCompetition(String competitionCode) {
+        Optional<Competition> competitionOp = competitionRepository.findByCode(competitionCode);
+        if (competitionOp.isEmpty()) {
+            throw new EntityNotFoundException("Competition");
+        }
+        return competitionOp.get();
     }
 }

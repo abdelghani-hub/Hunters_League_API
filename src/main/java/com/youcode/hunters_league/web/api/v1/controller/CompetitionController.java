@@ -3,6 +3,7 @@ package com.youcode.hunters_league.web.api.v1.controller;
 import com.youcode.hunters_league.domain.Competition;
 import com.youcode.hunters_league.exception.NullOrBlankArgException;
 import com.youcode.hunters_league.service.CompetitionService;
+import com.youcode.hunters_league.service.dto.CompetitionDetailsDTO;
 import com.youcode.hunters_league.web.vm.competition.CompetitionEditVM;
 import com.youcode.hunters_league.web.vm.competition.CompetitionVM;
 import com.youcode.hunters_league.web.vm.mapper.CompetitionEditVmMapper;
@@ -27,6 +28,12 @@ public class CompetitionController {
         this.competitionService = competitionService;
         this.competitionVmMapper = competitionVmMapper;
         this.competitionEditVmMapper = competitionEditVmMapper;
+    }
+
+    @GetMapping("/{code}")
+    public ResponseEntity<CompetitionDetailsDTO> getCompetition(@PathVariable String code) {
+        CompetitionDetailsDTO competitionDetailsDTO = competitionService.findByCode(code);
+        return new ResponseEntity<>(competitionDetailsDTO, HttpStatus.OK);
     }
 
     @PostMapping("/create")
