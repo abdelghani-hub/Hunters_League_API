@@ -34,7 +34,6 @@ public class ParticipationServiceImpl implements ParticipationService {
         Competition competition = competitionServiceImpl.getCompetition(competition_code);
         // Get the current user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
 
         AppUser user = (AppUser) authentication.getPrincipal();
 
