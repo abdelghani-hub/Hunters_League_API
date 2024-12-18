@@ -8,6 +8,6 @@ node {
 //       sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=Hunters_League"
 //     }
     // hello world
-    sh 'echo "Hello World"'
+    sh 'echo "SonarQube Analysis...!"'
   }
 }
