@@ -46,7 +46,7 @@ pipeline {
                         script: """
                         curl -s -u "$SONAR_TOKEN:" \
                         "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$SONAR_PROJECT_KEY" \
-                        | tee response.json | jq -r '.projectStatus.status'
+                        | /usr/bin/jq -r '.projectStatus.status'
                         """,
                         returnStdout: true
                     ).trim()
