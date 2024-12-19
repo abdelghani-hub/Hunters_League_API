@@ -4,6 +4,7 @@ pipeline {
             image 'maven:3.8.8-eclipse-temurin-17'
             args '''
                 -v /var/run/docker.sock:/var/run/docker.sock
+                -v /usr/bin/docker:/usr/bin/docker
                 --network samurai_net
             '''
         }
