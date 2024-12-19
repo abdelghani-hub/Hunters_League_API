@@ -40,6 +40,12 @@ pipeline {
                 }
             }
         }
+        stage('Debugging') {
+            steps {
+                sh 'echo $PATH'
+                sh 'which docker'
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
