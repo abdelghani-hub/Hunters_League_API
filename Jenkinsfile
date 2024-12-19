@@ -79,24 +79,24 @@ pipeline {
         }
     }
     post {
-        success {
-            echo "Build succeeded !"
-            mail to: 'aaittamghart8@gmail.com',
-                 subject: "SUCCESS: Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
-                 body: "✅ Build succeeded.\n\nDetails : ${env.BUILD_URL}"
-            slackSend color: 'good',
-                      message: "SUCCESS: Build #${env.BUILD_NUMBER} of ${env.JOB_NAME} succeeded!\nDetails: ${env.BUILD_URL}"
-        }
-        failure {
-            echo "Build failed !"
-            mail to: 'aaittamghart8@gmail.com',
-                 subject: "FAILURE: Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
-                 body: "❌ Build failed.\n\nDetails : ${env.BUILD_URL}"
-            slackSend color: 'danger',
-                      message: "FAILURE: Build #${env.BUILD_NUMBER} of ${env.JOB_NAME} failed!\nDetails: ${env.BUILD_URL}"
-        }
-        always {
-            echo "Pipeline execution complete."
-        }
-    }
+             success {
+                 echo "Build succeeded!"
+                 emailext(
+                     subject: "SUCCESS: Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
+                     body: "✅ Build succeeded.\n\nDetails: ${env.BUILD_URL}",
+                     to: 'aaittamghart8@gmail.com'
+                 )
+             }
+             failure {
+                 echo "Build failed!"
+                 emailext(
+                     subject: "FAILURE: Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
+                     body: "❌ Build failed.\n\nDetails: ${env.BUILD_URL}",
+                     to: 'aaittamghart8@gmail.com'
+                 )
+             }
+             always {
+                 echo "Pipeline execution complete."
+             }
+         }
 }
