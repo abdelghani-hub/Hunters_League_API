@@ -6,7 +6,7 @@ pipeline {
                 -v /var/run/docker.sock:/var/run/docker.sock
                 -v /usr/bin/docker:/usr/bin/docker
                 - /var/run/docker.sock:/var/run/docker.sock
-                - /usr/libexec/docker/cli-plugins:/usr/libexec/docker/cli-plugins
+                - /usr/bin/docker/cli-plugins:/usr/bin/docker/cli-plugins
                 --network samurai_net
             '''
         }
