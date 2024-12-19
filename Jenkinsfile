@@ -48,32 +48,12 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    echo "Building Docker Image..."
-                    sh 'docker -v'
-                    sh 'cp target/*.jar app.jar'
-                    sh """
-                    docker build -t ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER} \
-                               -t ${DOCKER_IMAGE_NAME}:latest .
-                    """
-                }
-            }
-        }
-        stage('Deploy Docker Container') {
+        stage('Dockerize') {
             steps {
                 script {
                     echo "Deploying Docker container..."
                     sh """
-                    docker stop ${DOCKER_CONTAINER_NAME} || true
-                    docker rm ${DOCKER_CONTAINER_NAME} || true
-
-                    docker run -d \
-                        --name ${DOCKER_CONTAINER_NAME} \
-                        --network samurai_net \
-                        -p 8443:8443 \
-                        ${DOCKER_IMAGE_NAME}:latest
+                    docker compose -f samurai.yml up -d
                     """
                 }
             }
@@ -86,4 +66,5 @@ pipeline {
         success {
             echo 'Pipeline succeeded! Deployment completed.'
         }
+    }
 }
