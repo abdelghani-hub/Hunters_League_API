@@ -66,7 +66,7 @@ pipeline {
                 script {
                     echo "Deploying Docker container..."
                     sh """
-                    docker run -d --name $DOCKER_CONTAINER_NAME -p 8443:8443 $DOCKER_IMAGE_NAME:${BUILD_NUMBER}
+                    docker compose up -d
                     """
                 }
             }
