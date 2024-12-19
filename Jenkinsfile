@@ -17,12 +17,14 @@ pipeline {
         stage('Build and SonarQube Analysis') {
             steps {
                 echo "Running Maven build and SonarQube analysis..."
-                sh """
-                mvn clean package sonar:sonar \
-                  -Dsonar.projectKey=$SONAR_PROJECT_KEY \
-                  -Dsonar.host.url=$SONAR_HOST_URL \
-                  -Dsonar.login=$SONAR_TOKEN
-                """
+                withSonarQubeEnv('MySonarQubeServer') {
+                    sh """
+                    mvn clean package sonar:sonar \
+                      -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+                      -Dsonar.host.url=$SONAR_HOST_URL \
+                      -Dsonar.login=$SONAR_TOKEN
+                    """
+                }
             }
         }
         stage('Quality Gate Check') {
