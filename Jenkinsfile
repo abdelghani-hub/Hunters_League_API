@@ -19,7 +19,7 @@ pipeline {
                 script {
                     echo "Checking out code from GitHub..."
                     checkout([$class: 'GitSCM',
-                        branches: [[name: '*/main']],
+                        branches: [[name: '*/feature/pipeline']],
                         userRemoteConfigs: [[
                             url: 'https://github.com/abdelghani-hub/Hunters_League.git'
                         ]]
