@@ -78,25 +78,4 @@ pipeline {
             }
         }
     }
-    post {
-             success {
-                 echo "Build succeeded!"
-                 mail to(
-                     subject: "SUCCESS: Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
-                     body: "✅ Build succeeded.\n\nDetails: ${env.BUILD_URL}",
-                     to: 'aaittamghart8@gmail.com'
-                 )
-             }
-             failure {
-                 echo "Build failed!"
-                 mail to(
-                     subject: "FAILURE: Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
-                     body: "❌ Build failed.\n\nDetails: ${env.BUILD_URL}",
-                     to: 'aaittamghart8@gmail.com'
-                 )
-             }
-             always {
-                 echo "Pipeline execution complete."
-             }
-         }
 }
