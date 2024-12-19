@@ -53,7 +53,7 @@ pipeline {
                 script {
                     echo "Deploying Docker container..."
                     sh """
-                    docker compose -f samurai.yml up -d
+                    docker compose up -d
                     """
                 }
             }
