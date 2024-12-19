@@ -48,12 +48,22 @@ pipeline {
                 }
             }
         }
-        stage('Dockerize') {
+        stage('Build') {
             steps {
                 script {
                     echo "Deploying Docker container..."
                     sh """
-                    docker-compose up
+                    docker build . -t $DOCKER_IMAGE_NAME
+                    """
+                }
+            }
+        }
+        stage('Deploy'){
+            steps{
+                script {
+                    echo "Deploying Docker container..."
+                    sh """
+                    docker run -d --name $DOCKER_CONTAINER_NAME -p 8443:8443 $DOCKER_IMAGE_NAME
                     """
                 }
             }
