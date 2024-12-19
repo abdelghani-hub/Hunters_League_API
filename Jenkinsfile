@@ -14,30 +14,6 @@ pipeline {
         SONAR_HOST_URL = "http://host.docker.internal:9001"
     }
     stages {
-        stage('Install Tools') {
-            steps {
-                script {
-                    echo "Installing jq and Docker CLI..."
-                    sh '''
-                        apt-get update && apt-get install -y jq
-                    '''
-                }
-            }
-        }
-
-        stage('Checkout Code') {
-            steps {
-                script {
-                    echo "Checking out code from GitHub..."
-                    checkout([$class: 'GitSCM',
-                        branches: [[name: '*/feature/pipeline']],
-                        userRemoteConfigs: [[
-                            url: 'https://github.com/abdelghani-hub/Hunters_League.git'
-                        ]]
-                    ])
-                }
-            }
-        }
         stage('Build and SonarQube Analysis') {
             steps {
                 echo "Running Maven build and SonarQube analysis..."
@@ -52,16 +28,9 @@ pipeline {
         stage('Quality Gate Check') {
             steps {
                 script {
-                    echo "Checking SonarQube Quality Gate..."
-                    def qualityGate = sh(
-                        script: """
-                        curl -s -u "$SONAR_TOKEN:" \
-                        "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$SONAR_PROJECT_KEY" \
-                        | /usr/bin/jq -r '.projectStatus.status'
-                        """,
-                        returnStdout: true
-                    ).trim()
-                    if (qualityGate != "OK") {
+                    echo "Waiting for SonarQube Quality Gate..."
+                    def qualityGate = waitForQualityGate()
+                    if (qualityGate.status != 'OK') {
                         error "Quality Gate failed! Stopping the build."
                     }
                     echo "Quality Gate passed! Proceeding..."
