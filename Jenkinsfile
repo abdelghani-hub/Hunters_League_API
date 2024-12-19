@@ -14,6 +14,17 @@ pipeline {
         SONAR_HOST_URL = "http://host.docker.internal:9001"
     }
     stages {
+        stage('Install Tools') {
+            steps {
+                script {
+                    echo "Installing jq and Docker CLI..."
+                    sh '''
+                        apt-get update && apt-get install -y jq
+                    '''
+                }
+            }
+        }
+
         stage('Checkout Code') {
             steps {
                 script {
