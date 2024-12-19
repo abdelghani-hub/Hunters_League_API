@@ -66,7 +66,7 @@ pipeline {
                 script {
                     echo "Deploying Docker container..."
                     sh """
-                    docker compose up -d
+                    docker compose up
                     """
                 }
             }
