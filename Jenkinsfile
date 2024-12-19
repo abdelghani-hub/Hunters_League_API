@@ -11,7 +11,7 @@ pipeline {
     environment {
         SONAR_PROJECT_KEY = "Hunters_League"
         SONAR_TOKEN = "sqa_4bd153196a6890aaebaa8e23d1e59842a5563a0b"
-        SONAR_HOST_URL = "http://host.docker.internal:9000"
+        SONAR_HOST_URL = "http://host.docker.internal:9001"
     }
     stages {
         stage('Checkout Code') {
