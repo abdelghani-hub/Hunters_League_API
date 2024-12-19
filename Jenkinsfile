@@ -86,9 +86,4 @@ pipeline {
         success {
             echo 'Pipeline succeeded! Deployment completed.'
         }
-        always {
-            // Clean up old images to save space
-            sh "docker system prune -f"
-        }
-    }
 }
