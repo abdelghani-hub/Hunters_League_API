@@ -12,8 +12,15 @@ pipeline {
         SONAR_PROJECT_KEY = "Hunters_League"
         SONAR_TOKEN = "sqa_4bd153196a6890aaebaa8e23d1e59842a5563a0b"
         SONAR_HOST_URL = "http://host.docker.internal:9001"
+        DOCKER_IMAGE_NAME = "hunters_league_img"
+        DOCKER_CONTAINER_NAME = "hunters_league_container"
     }
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build and SonarQube Analysis') {
             steps {
                 echo "Running Maven build and SonarQube analysis..."
@@ -40,17 +47,16 @@ pipeline {
                 }
             }
         }
-        stage('Debugging') {
-            steps {
-                sh 'echo $PATH'
-                sh 'which docker'
-            }
-        }
         stage('Build Docker Image') {
             steps {
                 script {
                     echo "Building Docker Image..."
-                    sh 'docker build -t hunters_league_img .'
+                    sh 'docker -v'
+                    sh 'cp target/*.jar app.jar'
+                    sh """
+                    docker build -t ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER} \
+                               -t ${DOCKER_IMAGE_NAME}:latest .
+                    """
                 }
             }
         }
@@ -59,12 +65,29 @@ pipeline {
                 script {
                     echo "Deploying Docker container..."
                     sh """
-                    docker stop hunters_league_container || true
-                    docker rm hunters_league_img || true
-                    docker run -d --name hunters_league_container hunters_league_img
+                    docker stop ${DOCKER_CONTAINER_NAME} || true
+                    docker rm ${DOCKER_CONTAINER_NAME} || true
+
+                    docker run -d \
+                        --name ${DOCKER_CONTAINER_NAME} \
+                        --network samurai_net \
+                        -p 8443:8443 \
+                        ${DOCKER_IMAGE_NAME}:latest
                     """
                 }
             }
+        }
+    }
+    post {
+        failure {
+            echo 'Pipeline failed! Sending notifications...'
+        }
+        success {
+            echo 'Pipeline succeeded! Deployment completed.'
+        }
+        always {
+            // Clean up old images to save space
+            sh "docker system prune -f"
         }
     }
 }
