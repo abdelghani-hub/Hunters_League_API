@@ -5,6 +5,7 @@ pipeline {
             args '''
                 -v /usr/bin/docker:/usr/bin/docker
                 -v /var/run/docker.sock:/var/run/docker.sock
+                --group-add $(getent group docker | cut -d: -f3)
                 --network samurai_net
             '''
         }
