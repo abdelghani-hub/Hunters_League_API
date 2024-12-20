@@ -5,7 +5,6 @@ pipeline {
             args '''
                 -v /var/run/docker.sock:/var/run/docker.sock
                 -v /usr/bin/docker:/usr/bin/docker
-                -v /var/run/docker.sock:/var/run/docker.sock
                 --network samurai_net
             '''
         }
@@ -57,7 +56,7 @@ pipeline {
                     docker stop ${DOCKER_CONTAINER_NAME} || true
                     docker rm ${DOCKER_CONTAINER_NAME} || true
                     docker rmi ${DOCKER_IMAGE_NAME} || true
-                    docker build . -t $DOCKER_IMAGE_NAME:${BUILD_NUMBER}
+                    docker build . -t
                     """
                 }
             }
