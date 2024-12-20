@@ -10,7 +10,7 @@ services:
       - 'POSTGRES_USER=samurai'
 
     volumes:
-      - "/d/pgdata:/var/lib/postgresql/data:rw"
+      - /d/pgdata:/var/lib/postgresql/data:rw
     ports:
       - '5432:5432'
     networks:
@@ -43,7 +43,3 @@ networks:
 volumes:
   postgres_data:
     driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: "/d/pgdata"
