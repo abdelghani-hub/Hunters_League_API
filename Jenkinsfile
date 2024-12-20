@@ -1,15 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.8.8-eclipse-temurin-17'
-            args '''
-                -v /usr/bin/docker:/usr/bin/docker
-                -v /var/run/docker.sock:/var/run/docker.sock
-                --group-add $(getent group docker | cut -d: -f3)
-                --network samurai_net
-            '''
-        }
-    }
+    agent any
     environment {
         SONAR_PROJECT_KEY = "Hunters_League"
         SONAR_TOKEN = "sqa_4bd153196a6890aaebaa8e23d1e59842a5563a0b"
@@ -57,7 +47,7 @@ pipeline {
                     docker stop ${DOCKER_CONTAINER_NAME} || true
                     docker rm ${DOCKER_CONTAINER_NAME} || true
                     docker rmi ${DOCKER_IMAGE_NAME} || true
-                    docker build . -t
+                    docker build -t ${DOCKER_IMAGE_NAME} .
                     """
                 }
             }
