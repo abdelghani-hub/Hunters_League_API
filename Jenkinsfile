@@ -44,9 +44,8 @@ pipeline {
                 script {
                     echo "Deploying Docker container..."
                     sh """
-                    docker stop ${DOCKER_CONTAINER_NAME} || true
-                    docker rm ${DOCKER_CONTAINER_NAME} || true
-                    docker rmi ${DOCKER_IMAGE_NAME} || true
+                    docker-compose down || true
+                    docker rmi ${DOCKER_IMAGE_NAME}:latest || true
                     """
                 }
             }
