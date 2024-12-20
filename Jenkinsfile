@@ -39,7 +39,7 @@ pipeline {
                 }
             }
         }
-        stage('Build') {
+        stage('Pre Deploy') {
             steps {
                 script {
                     echo "Deploying Docker container..."
