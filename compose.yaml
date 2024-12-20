@@ -10,7 +10,7 @@ services:
       - 'POSTGRES_USER=samurai'
 
     volumes:
-      - D:/pgdata:/var/lib/postgresql/data
+      - "D:\\pgdata:/var/lib/postgresql/data"
     ports:
       - '5433:5433'
     networks:
