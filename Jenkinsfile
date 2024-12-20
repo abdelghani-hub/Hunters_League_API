@@ -4,7 +4,7 @@ pipeline {
         SONAR_PROJECT_KEY = "Hunters_League"
         SONAR_TOKEN = "sqa_4bd153196a6890aaebaa8e23d1e59842a5563a0b"
         SONAR_HOST_URL = "http://host.docker.internal:9001"
-        DOCKER_IMAGE_NAME = "hunters_league_img"
+        DOCKER_IMAGE_NAME = "hunters_league"
         DOCKER_CONTAINER_NAME = "hunters_league_container"
     }
     stages {
@@ -47,7 +47,6 @@ pipeline {
                     docker stop ${DOCKER_CONTAINER_NAME} || true
                     docker rm ${DOCKER_CONTAINER_NAME} || true
                     docker rmi ${DOCKER_IMAGE_NAME} || true
-                    docker build -t ${DOCKER_IMAGE_NAME} .
                     """
                 }
             }
@@ -57,7 +56,7 @@ pipeline {
                 script {
                     echo "Deploying Docker container..."
                     sh """
-                    docker-compose up
+                    docker-compose up -d
                     """
                 }
             }

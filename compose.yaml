@@ -9,8 +9,10 @@ services:
       - 'POSTGRES_PASSWORD=password'
       - 'POSTGRES_USER=samurai'
 
+    volumes:
+      - "D:\\pgdata:/var/lib/postgresql/data"
     ports:
-      - '5433:5433'
+      - '5432:5432'
     networks:
       - samurai_net
 
@@ -40,3 +42,4 @@ networks:
 
 volumes:
   postgres_data:
+    driver: local
