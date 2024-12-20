@@ -19,7 +19,7 @@ spring:
 
   liquibase:
     enabled: false
-    change-log: db/changelog/master.yaml
+#    change-log: db/changelog/master.yaml
 
 server:
   ssl:
