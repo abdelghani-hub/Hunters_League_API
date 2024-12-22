@@ -6,6 +6,7 @@ pipeline {
         SONAR_HOST_URL = "http://host.docker.internal:9001"
         DOCKER_IMAGE_NAME = "hunters_league"
         DOCKER_CONTAINER_NAME = "hunters_league_container"
+        PG_DATA_PATH = "${env.POSTGRES_DATA_PATH}"
     }
     stages {
         stage('Checkout') {
@@ -55,7 +56,9 @@ pipeline {
                 script {
                     echo "Deploying Docker container..."
                     sh """
-                    docker-compose up -d
+                        mkdir -p ${PG_DATA_PATH}
+                        chmod 777 ${PG_DATA_PATH}
+                        docker-compose up -d
                     """
                 }
             }
