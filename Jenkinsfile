@@ -56,8 +56,6 @@ pipeline {
                 script {
                     echo "Deploying Docker container..."
                     sh """
-                        mkdir -p ${PG_DATA_PATH}
-                        chmod 777 ${PG_DATA_PATH}
                         docker-compose up -d
                     """
                 }
