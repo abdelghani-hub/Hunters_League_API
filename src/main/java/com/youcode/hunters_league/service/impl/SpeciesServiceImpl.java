@@ -6,6 +6,8 @@ import com.youcode.hunters_league.repository.SpeciesRepository;
 import com.youcode.hunters_league.service.SpeciesService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -59,5 +61,10 @@ public class SpeciesServiceImpl implements SpeciesService {
             return speciesRepository.save(species);
         }
         return null;
+    }
+
+    @Override
+    public Page<Species> findAll(Pageable pageable) {
+        return speciesRepository.findAll(pageable);
     }
 }
