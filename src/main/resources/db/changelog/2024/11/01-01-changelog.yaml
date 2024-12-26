@@ -10,7 +10,7 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             baseTableName: participation
             baseColumnNames: user_id
-            referencedTableName: "user"
+            referencedTableName: "appUser"
             referencedColumnNames: id
             onUpdate: cascade
             onDelete: set null
