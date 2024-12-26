@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.youcode</groupId>
     <artifactId>hunters_league</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>hunters_league</name>
     <description>hunters_league</description>
     <url/>
