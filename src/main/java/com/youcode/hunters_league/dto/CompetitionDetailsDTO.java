@@ -1,4 +1,4 @@
-package com.youcode.hunters_league.service.dto;
+package com.youcode.hunters_league.dto;
 public class CompetitionDetailsDTO {
     private String code;
     private String location;

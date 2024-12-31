@@ -1,18 +1,18 @@
-package com.youcode.hunters_league.web.vm.user;
+package com.youcode.hunters_league.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class LoginVM {
-    @NotBlank(message = "login field is required")
+public class LoginRequest {
+    @NotBlank(message = "login field is required (email | username)")
     private String login;
 
     @NotBlank(message = "Password is required")
     private String password;
 
-    public LoginVM() {
+    public LoginRequest() {
     }
 
-    public LoginVM(String login, String password) {
+    public LoginRequest(String login, String password) {
         this.login = login;
         this.password = password;
     }

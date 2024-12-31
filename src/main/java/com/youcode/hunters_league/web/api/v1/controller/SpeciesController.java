@@ -10,7 +10,10 @@ import com.youcode.hunters_league.web.vm.species.SpeciesVM;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +21,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/species")
+@PreAuthorize("hasRole('ADMIN')")
 public class SpeciesController {
     private final SpeciesService speciesService;
     private final SpeciesVmMapper speciesVmMapper;
@@ -57,5 +61,14 @@ public class SpeciesController {
         }
         res.put("error", "Species not found");
         return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
+    }
+
+    // Paginate Species
+    @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('MEMBER')")
+    public ResponseEntity<Page<SpeciesVM>> findAll(Pageable pageable){
+        Page<Species> farms = speciesService.findAll(pageable);
+        Page<SpeciesVM> farmResponseVM = farms.map(speciesVmMapper::toSpeciesVM);
+        return new ResponseEntity<>(farmResponseVM , HttpStatus.OK);
     }
 }

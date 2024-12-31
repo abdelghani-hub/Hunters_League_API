@@ -1,6 +1,6 @@
 package com.youcode.hunters_league.specification;
 
-import com.youcode.hunters_league.domain.User;
+import com.youcode.hunters_league.domain.AppUser;
 import jakarta.persistence.criteria.Predicate;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class UserSpecification {
 
-    public static Specification<User> filterUser(String firstName, String lastName, String cin) {
+    public static Specification<AppUser> filterUser(String firstName, String lastName, String cin) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 

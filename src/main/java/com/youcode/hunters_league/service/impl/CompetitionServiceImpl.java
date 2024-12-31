@@ -7,8 +7,8 @@ import com.youcode.hunters_league.exception.InvalidCredentialsException;
 import com.youcode.hunters_league.exception.NotValidConstraintException;
 import com.youcode.hunters_league.repository.CompetitionRepository;
 import com.youcode.hunters_league.service.CompetitionService;
-import com.youcode.hunters_league.service.dto.CompetitionDetailsDTO;
-import com.youcode.hunters_league.service.dto.mapper.CompetitionDetailsDtoMapper;
+import com.youcode.hunters_league.dto.CompetitionDetailsDTO;
+import com.youcode.hunters_league.dto.mapper.CompetitionDetailsDtoMapper;
 import com.youcode.hunters_league.utils.LocalDateTimeUtil;
 import com.youcode.hunters_league.web.vm.mapper.CompetitionVmMapper;
 import jakarta.transaction.Transactional;
@@ -50,7 +50,7 @@ public class CompetitionServiceImpl implements CompetitionService {
             throw new NotValidConstraintException("There is already a competition in the same week");
         }
 
-        // Save & Map the user
+        // Save & Map the appUser
         Competition savedCompetition = competitionRepository.save(competition);
         return savedCompetition;
     }
@@ -64,7 +64,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     public Competition update(Competition competition) {
         // check if exists
         if (!competitionRepository.existsById(competition.getId()))
-            return null;
+            throw new EntityNotFoundException("Competition");
 
         // Check if competition code already exists
         if (competitionRepository.existsByCodeAndIdNot(competition.getCode(), competition.getId())) {

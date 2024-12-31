@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1733243187015-2
+      author: your_name
+      changes:
+        - renameColumn:
+            tableName: participation
+            oldColumnName: user_id
+            newColumnName: app_user_id
+            columnDataType: UUID

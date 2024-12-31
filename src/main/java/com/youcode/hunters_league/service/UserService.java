@@ -1,19 +1,21 @@
 package com.youcode.hunters_league.service;
 
-import com.youcode.hunters_league.domain.User;
+import com.youcode.hunters_league.domain.AppUser;
 import jakarta.validation.Valid;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
-    User save(@Valid User user);
+    AppUser save(@Valid AppUser appUser);
 
-    Optional<User> findByUsername(String username);
+    Optional<AppUser> findByUsername(String username);
 
-    Optional<User> findByEmail(String email);
+    Optional<AppUser> findByEmail(String email);
 
-    Optional<User> findByCin(String cin);
+    Optional<AppUser> findByCin(String cin);
 
-    User findById(UUID id);
+    AppUser findById(UUID id);
+
+    AppUser findByUsernameOrEmail(String username, String email);
 }

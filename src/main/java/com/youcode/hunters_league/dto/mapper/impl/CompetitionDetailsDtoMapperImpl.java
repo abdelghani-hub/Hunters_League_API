@@ -1,9 +1,10 @@
-package com.youcode.hunters_league.service.dto.mapper.impl;
+package com.youcode.hunters_league.dto.mapper.impl;
 import com.youcode.hunters_league.domain.Competition;
-import com.youcode.hunters_league.service.dto.CompetitionDetailsDTO;
+import com.youcode.hunters_league.dto.mapper.CompetitionDetailsDtoMapper;
+import com.youcode.hunters_league.dto.CompetitionDetailsDTO;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import com.youcode.hunters_league.service.dto.mapper.CompetitionDetailsDtoMapper;
+
 import org.springframework.stereotype.Component;
 @Component
 public class CompetitionDetailsDtoMapperImpl implements CompetitionDetailsDtoMapper {
