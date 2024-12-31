@@ -1,5 +1,6 @@
 package com.youcode.hunters_league.config;
 
+import com.youcode.hunters_league.domain.AppUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -28,7 +30,11 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(Map.of(), userDetails);
+        Map<String, Object> extractedClaims = new HashMap<>();
+        AppUser user = (AppUser) userDetails;
+        extractedClaims.put("role", user.getRole().toString());
+        extractedClaims.put("username", userDetails.getUsername());
+        return generateToken(extractedClaims, userDetails);
     }
 
     public String generateToken(
@@ -58,7 +64,7 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
+        return Jwts.parser()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)

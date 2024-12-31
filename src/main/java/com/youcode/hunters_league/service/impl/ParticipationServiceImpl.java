@@ -37,7 +37,7 @@ public class ParticipationServiceImpl implements ParticipationService {
         AppUser user = (AppUser) authentication.getPrincipal();
 
         // Validation
-        if(user.getLicenseExpirationDate().isBefore(competition.getDate()))
+        if (user.getLicenseExpirationDate().isBefore(competition.getDate()))
             throw new NotValidConstraintException("Your license is expired!");
 
         if (!competition.getOpenRegistration())
@@ -49,11 +49,14 @@ public class ParticipationServiceImpl implements ParticipationService {
         if (competition.getParticipations().size() == competition.getMaxParticipants())
             throw new NotValidConstraintException("The competition is full!");
 
-        if (!competition.getParticipations().isEmpty() && competition.getParticipations().stream().anyMatch(participation -> {
-            if (participation.getAppUser() != null && participation.getAppUser().getId().equals(user.getId()))
-                return true;
-            return false;
-        }))
+        if (!competition.getParticipations().isEmpty()
+                && competition.getParticipations()
+                .stream().anyMatch(
+                        participation -> {
+                            if (participation.getAppUser() != null && participation.getAppUser().getId().equals(user.getId()))
+                                return true;
+                            return false;
+                        }))
             throw new NotValidConstraintException("You are already registered in this competition!");
 
         Participation participation = new Participation();

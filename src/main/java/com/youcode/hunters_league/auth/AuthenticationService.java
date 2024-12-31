@@ -12,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,21 +20,24 @@ import java.time.LocalDateTime;
 public class AuthenticationService {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationService(UserService userService, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public AuthenticationService(UserService userService, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if (request.getConfirmPassword() == null || !request.getPassword().equals(request.getConfirmPassword())) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+
         AppUser appUser = new AppUser();
         appUser.setUsername(request.getUsername());
         appUser.setEmail(request.getEmail());
+        appUser.setPassword(request.getPassword());
         appUser.setFirstName(request.getFirstName());
         appUser.setLastName(request.getLastName());
         appUser.setCin(request.getCin());

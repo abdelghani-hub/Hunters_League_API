@@ -64,7 +64,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     public Competition update(Competition competition) {
         // check if exists
         if (!competitionRepository.existsById(competition.getId()))
-            return null;
+            throw new EntityNotFoundException("Competition");
 
         // Check if competition code already exists
         if (competitionRepository.existsByCodeAndIdNot(competition.getCode(), competition.getId())) {
