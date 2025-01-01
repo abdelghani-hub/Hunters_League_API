@@ -13,6 +13,8 @@ import com.youcode.hunters_league.utils.LocalDateTimeUtil;
 import com.youcode.hunters_league.web.vm.mapper.CompetitionVmMapper;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -118,5 +120,10 @@ public class CompetitionServiceImpl implements CompetitionService {
             throw new EntityNotFoundException("Competition");
         }
         return competitionOp.get();
+    }
+
+    @Override
+    public Page<Competition> findAll(Pageable pageable) {
+        return competitionRepository.findAll(pageable);
     }
 }

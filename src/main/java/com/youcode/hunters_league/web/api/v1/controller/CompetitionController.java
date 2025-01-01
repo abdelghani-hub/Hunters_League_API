@@ -9,6 +9,8 @@ import com.youcode.hunters_league.web.vm.competition.CompetitionVM;
 import com.youcode.hunters_league.web.vm.mapper.CompetitionEditVmMapper;
 import com.youcode.hunters_league.web.vm.mapper.CompetitionVmMapper;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -67,5 +69,14 @@ public class CompetitionController {
         }
         res.put("error", "Competition Not Found!");
         return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
+    }
+
+    // Paginate Competitions
+    @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('MEMBER', 'JURY', 'ADMIN')")
+    public ResponseEntity<Page<CompetitionVM>> findAll(Pageable pageable){
+        Page<Competition> competitions = competitionService.findAll(pageable);
+        Page<CompetitionVM> competitionResponseVM = competitions.map(competitionVmMapper::toCompetitionVM);
+        return new ResponseEntity<>(competitionResponseVM , HttpStatus.OK);
     }
 }
