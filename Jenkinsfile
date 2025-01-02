@@ -1,4 +1,4 @@
-pipeline {
+/* pipeline {
     agent any
     environment {
         SONAR_PROJECT_KEY = "Hunters_League"
@@ -68,6 +68,51 @@ pipeline {
         }
         success {
             echo 'Pipeline succeeded! Deployment completed.'
+        }
+    }
+} */
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Démonstration du contrôle de version
+                git branch: 'feature/pipeline',
+                    url: 'https://github.com/abdelghani-hub/Hunters_League_API.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Démonstration du build automatisé
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            mail to: 'aaittamghart8@gmail.com',
+                 subject: "Success ✔️: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                 body: "The job passed. Check it here: ${env.BUILD_URL}"
+        }
+        failure {
+            mail to: 'aaittamghart8@gmail.com',
+                 subject: "Failed ❌: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                 body: "The job failed. Check it here: ${env.BUILD_URL}"
         }
     }
 }
