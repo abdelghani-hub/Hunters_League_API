@@ -12,6 +12,8 @@ import com.youcode.hunters_league.specification.UserSpecification;
 import com.youcode.hunters_league.web.vm.mapper.UserVmMapper;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -154,6 +156,11 @@ public class UserServiceImpl implements UserService {
         return userRepository
                 .findByUsernameOrEmail(username, email)
                 .orElseThrow(() -> new EntityNotFoundException("User"));
+    }
+
+    @Override
+    public Page<AppUser> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public List<AppUser> filter(String firstName, String lastName, String cin) {

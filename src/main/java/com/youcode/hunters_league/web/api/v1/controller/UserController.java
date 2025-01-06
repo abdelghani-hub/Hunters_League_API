@@ -1,13 +1,17 @@
 package com.youcode.hunters_league.web.api.v1.controller;
 
 import com.youcode.hunters_league.domain.AppUser;
+import com.youcode.hunters_league.domain.Species;
 import com.youcode.hunters_league.exception.NullOrBlankArgException;
 import com.youcode.hunters_league.service.impl.UserServiceImpl;
 import com.youcode.hunters_league.web.vm.mapper.UserUpdateVmMapper;
 import com.youcode.hunters_league.web.vm.mapper.UserVmMapper;
+import com.youcode.hunters_league.web.vm.species.SpeciesVM;
 import com.youcode.hunters_league.web.vm.user.UserUpdateVM;
 import com.youcode.hunters_league.web.vm.user.UserVM;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -70,5 +74,12 @@ public class UserController {
         List<AppUser> filteredAppUsers = userServiceImpl.filter(firstName, lastName, cin);
         List<UserVM> userVMs = filteredAppUsers.stream().map(userVmMapper::toUserVM).toList();
         return new ResponseEntity<>(userVMs, HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Page<UserVM>> findAll(Pageable pageable){
+        Page<AppUser> users = userServiceImpl.findAll(pageable);
+        Page<UserVM> farmResponseVM = users.map(userVmMapper::toUserVM);
+        return new ResponseEntity<>(farmResponseVM , HttpStatus.OK);
     }
 }
