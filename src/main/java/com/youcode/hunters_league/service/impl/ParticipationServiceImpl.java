@@ -9,6 +9,8 @@ import com.youcode.hunters_league.service.ParticipationService;
 import com.youcode.hunters_league.web.vm.mapper.CompetitionVmMapper;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -64,5 +66,10 @@ public class ParticipationServiceImpl implements ParticipationService {
         participation.setAppUser(user);
         participationRepository.save(participation);
         return true;
+    }
+
+    @Override
+    public Page<Participation> findAll(Pageable pageable) {
+        return participationRepository.findAll(pageable);
     }
 }

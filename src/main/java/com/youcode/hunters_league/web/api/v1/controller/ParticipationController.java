@@ -1,15 +1,17 @@
 package com.youcode.hunters_league.web.api.v1.controller;
 
+import com.youcode.hunters_league.domain.Participation;
 import com.youcode.hunters_league.service.impl.ParticipationServiceImpl;
+import com.youcode.hunters_league.web.vm.mapper.ParticipationVmMapper;
 import com.youcode.hunters_league.web.vm.participation.ParticipationCreateVM;
+import com.youcode.hunters_league.web.vm.participation.ParticipationVM;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,9 +21,12 @@ import java.util.Map;
 public class ParticipationController {
 
     private ParticipationServiceImpl participationServiceImpl;
+    private final ParticipationVmMapper participationVmMapper;
 
-    public ParticipationController(ParticipationServiceImpl participationServiceImpl) {
+    public ParticipationController(ParticipationServiceImpl participationServiceImpl,
+                                   ParticipationVmMapper participationVmMapper) {
         this.participationServiceImpl = participationServiceImpl;
+        this.participationVmMapper = participationVmMapper;
     }
 
     @PostMapping("/create")
@@ -36,5 +41,13 @@ public class ParticipationController {
         // Prepare success response
         response.put("message", "Registered successfully.");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('JURY', 'ADMIN')")
+    public ResponseEntity<Page<ParticipationVM>> findAll(Pageable pageable){
+        Page<Participation> participations = participationServiceImpl.findAll(pageable);
+        Page<ParticipationVM> participationVMS = participations.map(participationVmMapper::toParticipationVM);
+        return new ResponseEntity<>(participationVMS , HttpStatus.OK);
     }
 }
