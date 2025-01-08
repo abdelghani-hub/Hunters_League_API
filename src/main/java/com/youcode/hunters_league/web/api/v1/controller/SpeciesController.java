@@ -71,4 +71,15 @@ public class SpeciesController {
         Page<SpeciesVM> farmResponseVM = farms.map(speciesVmMapper::toSpeciesVM);
         return new ResponseEntity<>(farmResponseVM , HttpStatus.OK);
     }
+
+    // get by name
+    @GetMapping("/name")
+    public ResponseEntity<SpeciesEditVM> findByName(String name) throws NullOrBlankArgException {
+        if (name == null || name.isEmpty())
+            throw new NullOrBlankArgException("name");
+
+        Species species = speciesService.findByName(name);
+        SpeciesEditVM speciesEditVM = speciesVmMapper.toSpeciesEditVM(species);
+        return new ResponseEntity<>(speciesEditVM, HttpStatus.OK);
+    }
 }

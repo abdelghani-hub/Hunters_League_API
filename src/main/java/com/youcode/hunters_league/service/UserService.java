@@ -23,4 +23,6 @@ public interface UserService {
     AppUser findByUsernameOrEmail(String username, String email);
 
     Page<AppUser> findAll(Pageable pageable);
+
+    AppUser updateByUsername(String username, AppUser appUser);
 }

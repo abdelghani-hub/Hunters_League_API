@@ -1,9 +1,8 @@
 package com.youcode.hunters_league.web.vm.user;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class UserUpdateVM {
@@ -28,16 +27,24 @@ public class UserUpdateVM {
     @NotBlank(message = "Nationality is required")
     private String nationality;
 
+    @NotBlank(message = "Role is required")
+    private String role;
+
+    @NotNull(message = "License expiration date is required")
+    private LocalDateTime licenseExpirationDate;
+
     public UserUpdateVM() {
     }
 
-    public UserUpdateVM(String firstName, String lastName, String username, String email, String cin, String nationality) {
+    public UserUpdateVM(UUID id, String firstName, String lastName, String username, String email, String cin, String nationality, LocalDateTime licenseExpirationDate) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.email = email;
         this.cin = cin;
         this.nationality = nationality;
+        this.licenseExpirationDate = licenseExpirationDate;
     }
 
     public UUID getId() {
@@ -94,5 +101,21 @@ public class UserUpdateVM {
 
     public void setNationality(String nationality) {
         this.nationality = nationality;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public LocalDateTime getLicenseExpirationDate() {
+        return licenseExpirationDate;
+    }
+
+    public void setLicenseExpirationDate(LocalDateTime licenseExpirationDate) {
+        this.licenseExpirationDate = licenseExpirationDate;
     }
 }

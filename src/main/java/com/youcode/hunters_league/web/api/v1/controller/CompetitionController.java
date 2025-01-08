@@ -36,9 +36,10 @@ public class CompetitionController {
 
     @GetMapping("/{code}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER', 'JURY')")
-    public ResponseEntity<CompetitionDetailsDTO> getCompetition(@PathVariable String code) {
-        CompetitionDetailsDTO competitionDetailsDTO = competitionService.findByCode(code);
-        return new ResponseEntity<>(competitionDetailsDTO, HttpStatus.OK);
+    public ResponseEntity<CompetitionEditVM> getCompetition(@PathVariable String code) {
+        Competition competition = competitionService.findByCode(code);
+        CompetitionEditVM competitionEditVM = competitionEditVmMapper.toCompetitionEditVM(competition);
+        return new ResponseEntity<>(competitionEditVM, HttpStatus.OK);
     }
 
     @PostMapping("/create")

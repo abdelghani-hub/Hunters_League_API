@@ -25,13 +25,11 @@ import java.util.UUID;
 public class CompetitionServiceImpl implements CompetitionService {
     private final CompetitionRepository competitionRepository;
     private final CompetitionVmMapper competitionVmMapper;
-    private final CompetitionDetailsDtoMapper competitionDetailsDtoMapper;
 
 
-    public CompetitionServiceImpl(CompetitionRepository competitionRepository, CompetitionVmMapper competitionVmMapper, CompetitionDetailsDtoMapper competitionDetailsDtoMapper) {
+    public CompetitionServiceImpl(CompetitionRepository competitionRepository, CompetitionVmMapper competitionVmMapper) {
         this.competitionRepository = competitionRepository;
         this.competitionVmMapper = competitionVmMapper;
-        this.competitionDetailsDtoMapper = competitionDetailsDtoMapper;
     }
 
     @Override
@@ -105,13 +103,13 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public CompetitionDetailsDTO findByCode(String code) throws EntityNotFoundException {
+    public Competition findByCode(String code) throws EntityNotFoundException {
         // Check if the competition exists
         Optional<Competition> competitionOp = competitionRepository.findByCode(code);
         if (competitionOp.isEmpty()) {
             throw new EntityNotFoundException("Competition");
         }
-        return competitionDetailsDtoMapper.toCompetitionDetailsDTO(competitionOp.get());
+        return competitionOp.get();
     }
 
     public Competition getCompetition(String competitionCode) {

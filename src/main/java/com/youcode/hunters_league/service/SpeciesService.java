@@ -18,4 +18,6 @@ public interface SpeciesService {
     Species update(Species species);
 
     Page<Species> findAll(Pageable pageable);
+
+    Species findByName(String name);
 }

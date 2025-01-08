@@ -21,7 +21,7 @@ public interface CompetitionService {
 
     boolean delete(UUID id);
 
-    CompetitionDetailsDTO findByCode(String code);
+    Competition findByCode(String code);
 
     Page<Competition> findAll(Pageable pageable);
 }

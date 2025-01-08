@@ -168,4 +168,26 @@ public class UserServiceImpl implements UserService {
         final List<AppUser> appUsers = userRepository.findAll(specification);
         return appUsers;
     }
+
+    @Override
+    public AppUser updateByUsername(String username, AppUser appUser) {
+        AppUser originalAppUser = this.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("AppUser"));
+        if (userRepository.existsByEmailAndUsernameNot(appUser.getEmail(), appUser.getUsername())) {
+            throw new AlreadyExistException("email", appUser.getEmail());
+        }
+        if (userRepository.existsByCinAndUsernameNot(appUser.getCin(), appUser.getUsername())) {
+            throw new AlreadyExistException("cin", appUser.getCin());
+        }
+
+        originalAppUser.setFirstName(appUser.getFirstName());
+        originalAppUser.setLastName(appUser.getLastName());
+        originalAppUser.setUsername(appUser.getUsername());
+        originalAppUser.setEmail(appUser.getEmail());
+        originalAppUser.setCin(appUser.getCin());
+        originalAppUser.setNationality(appUser.getNationality());
+        originalAppUser.setLicenseExpirationDate(appUser.getLicenseExpirationDate());
+        originalAppUser.setRole(appUser.getRole());
+
+        return userRepository.save(originalAppUser);
+    }
 }

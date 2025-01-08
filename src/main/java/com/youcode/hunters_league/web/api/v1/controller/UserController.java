@@ -2,6 +2,7 @@ package com.youcode.hunters_league.web.api.v1.controller;
 
 import com.youcode.hunters_league.domain.AppUser;
 import com.youcode.hunters_league.domain.Species;
+import com.youcode.hunters_league.exception.EntityNotFoundException;
 import com.youcode.hunters_league.exception.NullOrBlankArgException;
 import com.youcode.hunters_league.service.impl.UserServiceImpl;
 import com.youcode.hunters_league.web.vm.mapper.UserUpdateVmMapper;
@@ -44,6 +45,17 @@ public class UserController {
         return new ResponseEntity<>(userVM, HttpStatus.OK);
     }
 
+
+    // update by username ('users/update/username')
+    @PutMapping("/update/{username}")
+    public ResponseEntity<UserVM> updateByUsername(@PathVariable String username, @RequestBody @Valid UserUpdateVM userUpdateVM) {
+        AppUser appUser = userUpdateVmMapper.toUser(userUpdateVM);
+        AppUser updatedAppUser = userServiceImpl.updateByUsername(username, appUser);
+        UserVM userVM = userVmMapper.toUserVM(updatedAppUser);
+        return new ResponseEntity<>(userVM, HttpStatus.OK);
+    }
+
+
     @DeleteMapping("/delete")
     public ResponseEntity<Map<String, String>> delete(String id) throws NullOrBlankArgException {
         if (id == null || id.isEmpty())
@@ -81,5 +93,18 @@ public class UserController {
         Page<AppUser> users = userServiceImpl.findAll(pageable);
         Page<UserVM> farmResponseVM = users.map(userVmMapper::toUserVM);
         return new ResponseEntity<>(farmResponseVM , HttpStatus.OK);
+    }
+
+    // get by username
+    @GetMapping("/{username}")
+    public ResponseEntity<UserVM> findByUsername(@PathVariable String username) throws NullOrBlankArgException {
+        if (username == null || username.isEmpty())
+            throw new NullOrBlankArgException("(oo)username");
+
+        AppUser appUser = userServiceImpl.findByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException("User")
+        );
+        UserVM userVM = userVmMapper.toUserVM(appUser);
+        return new ResponseEntity<>(userVM, HttpStatus.OK);
     }
 }

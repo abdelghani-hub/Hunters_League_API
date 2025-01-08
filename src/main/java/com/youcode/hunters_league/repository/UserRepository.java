@@ -35,4 +35,10 @@ public interface UserRepository extends JpaRepository<AppUser, UUID>, JpaSpecifi
     // Check available CIN
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM AppUser u WHERE u.cin = :cin AND u.id != :excludeId")
     boolean existsByCinAndIdNot(@Param("cin") String cin, @Param("excludeId") UUID excludeId);
+
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM AppUser u WHERE u.email = :email AND u.username != :excludeUsername")
+    boolean existsByEmailAndUsernameNot(@Param("email") String email, @Param("excludeUsername") String excludeUsername);
+
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM AppUser u WHERE u.cin = :cin AND u.username != :excludeUsername")
+    boolean existsByCinAndUsernameNot(@Param("cin") String cin, @Param("excludeUsername") String excludeUsername);
 }

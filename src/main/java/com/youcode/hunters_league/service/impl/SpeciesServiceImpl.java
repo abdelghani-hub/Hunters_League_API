@@ -2,6 +2,7 @@ package com.youcode.hunters_league.service.impl;
 
 import com.youcode.hunters_league.domain.Species;
 import com.youcode.hunters_league.exception.AlreadyExistException;
+import com.youcode.hunters_league.exception.EntityNotFoundException;
 import com.youcode.hunters_league.repository.SpeciesRepository;
 import com.youcode.hunters_league.service.SpeciesService;
 import jakarta.transaction.Transactional;
@@ -66,5 +67,12 @@ public class SpeciesServiceImpl implements SpeciesService {
     @Override
     public Page<Species> findAll(Pageable pageable) {
         return speciesRepository.findAll(pageable);
+    }
+
+    @Override
+    public Species findByName(String name) {
+        return speciesRepository.findByName(name).orElseThrow(
+                () -> new EntityNotFoundException("Species")
+        );
     }
 }
